@@ -40,8 +40,8 @@ x_range = click.FloatRange(min=0.0, max=1.0)
     "-t",
     "--temperature",
     type=float,
-    required=True,
-    help="Fluid temperature, in degrees Celsius.",
+    required=False,
+    help="Fluid temperature, in degrees Celsius. Required unless evaluating freeze_point.",
 )
 @click.option(
     "-q",
@@ -51,7 +51,10 @@ x_range = click.FloatRange(min=0.0, max=1.0)
     default=False,
     help="Just report the value, good for scripts",
 )
-def cli(fluid: str, concentration: float, fluid_prop: str, temperature: float, quick: bool):
+def cli(fluid: str, concentration: float, fluid_prop: str, temperature: float | None, quick: bool):
+    if fluid_prop != "freeze_point" and temperature is None:
+        raise click.UsageError("--temperature is required unless --property is freeze_point")
+
     if concentration == 0.0 and fluid != "water":
         print(
             "Mixture requested, but concentration zero, assuming water and continuing",

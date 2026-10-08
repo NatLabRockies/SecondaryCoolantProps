@@ -47,14 +47,19 @@ def test_cli_uses_freeze_point_concentration() -> None:
             "0.4",
             "--property",
             "freeze_point",
-            "--temperature",
-            "20",
             "--quick",
         ],
     )
 
     assert result.exit_code == 0
     assert float(result.output) == pytest.approx(-20.568, abs=0.01)
+
+
+def test_cli_requires_temperature_for_temperature_dependent_property() -> None:
+    result = CliRunner().invoke(cli, ["--fluid", "water", "--property", "density"])
+
+    assert result.exit_code == 2
+    assert "--temperature is required unless --property is freeze_point" in result.output
 
 
 def test_cli_zero_mixture_concentration_uses_water(monkeypatch) -> None:
