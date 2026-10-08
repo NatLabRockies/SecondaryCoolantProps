@@ -17,8 +17,8 @@ The command has a help argument with output similar to this (execute manually to
       -p, --property [viscosity|specific_heat|density|conductivity|prandtl|thermal_diffusivity|freeze_point]
                                       Which fluid property to evaluate.
                                       [required]
-      -t, --temperature FLOAT         Fluid temperature, in degrees Celsius.
-                                      [required]
+      -t, --temperature FLOAT         Fluid temperature, in degrees Celsius. Required
+                                      unless evaluating freeze_point.
       -q, --quick                     Just report the value, good for scripts
       --help                          Show this message and exit.
 
@@ -39,10 +39,13 @@ Some example usages::
     Value:    3775.3537088494118
     Units:    [J/kg-K]
 
+    $ scprop --fluid propylene_glycol --concentration 0.4 --property freeze_point --quick
+    -20.567737840000002
+
 Note that the fluid argument must be from the list of supported fluids, and the property must be from the list of supported properties.
 Both of these are available from the help message.
 For glycol mixtures, the glycol concentration is a decimal value.
-The temperature input value is in Celsius.
+The temperature input value is in Celsius and is required for all properties except ``freeze_point``.
 
 By default the output is a nice summary, but there is a quick option that just reports the value.
 The quick value is a nice integration into some workflows that would require the CLI.
